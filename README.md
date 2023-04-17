@@ -10,16 +10,20 @@ This repository includes:
 To run the streamlit dashboard:
 ```streamlit run dashboard.py```
 
-For more documentation review the docs directory.
 
 ### Instructions
-For scraping Robert Parker's reviews: 
-- Create a [Robert Parker](https://www.robertparker.com/) account
-- Create a cred.py in the source folder with your credentials. It should follow this format:
-``` username = "" ```
-``` password = "" ```
-- Run the script with --country: python main.py --country {country}
+* Run the script without scraping data:
+python main.py
+
+* For scraping Robert Parker's reviews: 
+    - Create a [Robert Parker](https://www.robertparker.com/) account
+    - Create a cred.py in the source folder with your credentials. It should follow this format:
+```
+username = ""
+password = "" 
+```
+    - Run the script with --country: python main.py --country {country}
 
 
-
+For more documentation review the docs directory.
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
