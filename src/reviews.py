@@ -84,7 +84,9 @@ def clean_rating(rating: pd.Series) -> pd.Series:
         numbers_rating = (float, re.findall(r"\d+", rating))[1]
         numbers_rating = [float(x) for x in numbers_rating]
         average = sum(numbers_rating) / len(numbers_rating)
-        logger.info(f"Replaced {rating} with {average}")  # Write to log for auditting purposes
+        logger.info(
+            f"Replaced {rating} with {average}"
+        )  # Write to log for auditting purposes
         rating = str(average)
     rating = re.sub(r"[^\d\.]", "", rating)
     if (
@@ -158,7 +160,9 @@ def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
 
 def describe_data(df: pd.DataFrame) -> None:
     """Describe the cleaned DataFrame"""
-    logger.info(f"Columns with number of missing values after data preparation: \n{df.isna().sum()}")
+    logger.info(
+        f"Columns with number of missing values after data preparation: \n{df.isna().sum()}"
+    )
     logger.info(f"Describe the float variables: \n{df.describe()}")
     for i in df.columns:
         logger.info(f"Number of unique values in {i} column: {df[i].nunique()}")
@@ -175,7 +179,7 @@ def check_normal_dist(df: pd.DataFrame) -> None:
     ax = sns.boxplot(data=df, y=RATING)
     ax.set_title(f"Boxplot of ratings")
     write_plot(plt, "boxplot_rating")
-    
+
     values = np.array(df[RATING])
     result = sm.stats.diagnostic.lilliefors(values, dist="norm", pvalmethod="table")
 
@@ -280,10 +284,18 @@ def get_statistics(df: pd.DataFrame) -> None:
     )
     fig.write_image(rf"{IMAGES}/test_results.pdf")
 
-    plt.figure(figsize=(10,5))
-    ax = sns.lineplot(data=df, x='vintage', y=RATING, estimator='median', markers=True, dashes=True, err_style='band')
+    plt.figure(figsize=(10, 5))
+    ax = sns.lineplot(
+        data=df,
+        x="vintage",
+        y=RATING,
+        estimator="median",
+        markers=True,
+        dashes=True,
+        err_style="band",
+    )
     ax.set_title(f"Median rating over the years")
-    ax.set(xticks=df['vintage'].values)
+    ax.set(xticks=df["vintage"].values)
     write_plot(plt, "median_rating_over_the_years")
 
 

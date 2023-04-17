@@ -27,9 +27,7 @@ class _Settings(BaseSettings):
 settings = _Settings()
 
 logger.add(
-    sink=settings.log_dir / "log_{time:YYYYMMDD}.log",
-    rotation="00:00",
-    enqueue=True
+    sink=settings.log_dir / "log_{time:YYYYMMDD}.log", rotation="00:00", enqueue=True
 )
 # logger.add(
 #     sink=sys.stdout,                    # The screen (standard output 'channel').
@@ -38,6 +36,6 @@ logger.add(
 # )
 # logger.add(
 #     sink=sys.stderr,                    # The screen (standard error 'channel').
-#     colorize=True,                      
+#     colorize=True,
 #     format="<red>{time}</red> <level>{message}</level>"
 # )

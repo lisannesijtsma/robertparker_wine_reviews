@@ -66,6 +66,7 @@ def create_multiselect_filter(filter: str, subset: pd.DataFrame) -> pd.DataFrame
         )
     return filter_dataset(subset, filter, filter_values)
 
+
 st.sidebar.title(f"Filters")
 
 rows_filter = st.sidebar.slider(
@@ -105,7 +106,6 @@ for filter in container_filters:
     filtered_subset = create_multiselect_filter(filter, filtered_subset)
 
 
-
 #### CHARTS
 fig = plt.figure(figsize=(22, 10))
 fig_col1, fig_col2 = st.columns(2)
@@ -138,10 +138,12 @@ ax.set(xticks=filtered_subset["vintage"].values)
 st.pyplot(fig=fig, clear_figure=True)
 
 st.write("---")
-boxplot_filter = st.selectbox(f"Select a variable specifically for the boxplot",
-                                     options=["country", "reviewer", "color", "type", "sweetness"])
+boxplot_filter = st.selectbox(
+    f"Select a variable specifically for the boxplot",
+    options=["country", "reviewer", "color", "type", "sweetness"],
+)
 
 st.subheader(f"Boxplot of ratings by {boxplot_filter}")
-fig = plt.figure(figsize=(20,10))
+fig = plt.figure(figsize=(20, 10))
 sns.boxplot(data=subset, x=boxplot_filter, y=RATING)
 st.pyplot(fig=fig, clear_figure=True)

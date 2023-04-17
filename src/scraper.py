@@ -19,7 +19,9 @@ def open_webdriver() -> webdriver:
     try:
         driver = webdriver.Chrome()
     except:
-        logger.error(f"Error loading the Chromedriver. Make sure to have Make sure to have Chromium / Google Chrome installed")
+        logger.error(
+            f"Error loading the Chromedriver. Make sure to have Make sure to have Chromium / Google Chrome installed"
+        )
         raise ImportError
     return driver
 
@@ -86,7 +88,9 @@ def construct_page_urls(driver: webdriver, base_url: str, country: str) -> list[
             EC.presence_of_element_located((By.CSS_SELECTOR, ".control-label"))
         )
     except:
-        logger.info(f"No results found. Make sure there are results for the country requested.")
+        logger.info(
+            f"No results found. Make sure there are results for the country requested."
+        )
 
     page_html = get_html(driver)
     max_page_html = page_html.find("a", href=True, attrs={"aria-label": "Last"})["href"]
@@ -107,7 +111,9 @@ def search_reviews(driver: webdriver, page_urls: list[str]) -> list[str]:
     reviews_html = []
 
     for i, url in enumerate(page_urls, start=1):
-        logger.info(f"Requesting page {i} of {len(page_urls)}...") if i % 25 == 0 else None
+        logger.info(
+            f"Requesting page {i} of {len(page_urls)}..."
+        ) if i % 25 == 0 else None
         driver.get(url)
         # Wait max 20 seconds until the reviews are loadded on the website
         try:
@@ -143,8 +149,10 @@ def clean_variable(input: str, replaceword: str) -> str:
     """Remove variable word (e.g. "drink_date:") from result"""
     result = input.replace(replaceword, "")  # Remove variable word
     result = re.sub(
-        r"[^A-Za-z0-9,. ]+", "", result  # Remove non word characters (enters / slashes etc.)
-    ) 
+        r"[^A-Za-z0-9,. ]+",
+        "",
+        result,  # Remove non word characters (enters / slashes etc.)
+    )
     return result
 
 

@@ -19,7 +19,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-
     # Get the optional country argument from the command line
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -33,6 +32,6 @@ if __name__ == "__main__":
 
     if country:
         get_reviews(country)
-    else:  
+    else:
         # No data to export. Get insights in already scraped data
         main()
