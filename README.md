@@ -13,17 +13,20 @@ To run the streamlit dashboard:
 
 ### Instructions
 * Run the script without scraping data:
-python main.py
+```python main.py```
 
 * For scraping Robert Parker's reviews: 
     - Create a [Robert Parker](https://www.robertparker.com/) account
     - Create a cred.py in the source folder with your credentials. It should follow this format:
-```
-username = ""
-password = "" 
-```
-    - Run the script with --country: python main.py --country {country}
+    
+```username = ""```
+
+```password = ""``` 
+
+    - Run the script with --country: 
+```python main.py --country {country}```
 
 
 For more documentation review the docs directory.
+It is recommended to view the accompanying document in PDF. 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)

@@ -31,8 +31,7 @@ This project is based upon a hobby and a continuation on an earlier project name
 - Woodtype of the barrel
 - The ageing process
 
-There has been no research into the impact of the combined aforementioned attributes on the quality of wine. 
-It is also challenging to quantify the quality of wine, cause it will always remain a matter of taste and is hard to be measured subjectively. That is why this research is started. 
+It is challenging to quantify the quality of wine, cause it will always remain a matter of taste and is hard to be measured subjectively. That is why this research is started. 
 
 To give a clear picture of what has been researched in the previous project. The following will be a summary of the previous project.
 
@@ -42,11 +41,10 @@ The goal of the previous project was to research the quality of wine, the weathe
 For the weather a datasource from [NASA EARTH Data](https://www.earthdata.nasa.gov/) was used. Daily weather data of the Barolo region was used and converted to yearly averages. The data contained 18 variables measuring the different aspects of the weather. 
 Lastly the relation between the weather and quality of wine was examined. There was no direct relation between the 18 variables and the wine rating of Robert Parker.
 
-As mentioned, the previous project used wine ratings from Robert Parker as a measurement for wine quality. But how reliable are these wine ratings to actually measure quality? 
- 
 
 ### Business objectives
 
+As mentioned, the previous project used wine ratings from Robert Parker as a measurement for wine quality. But how reliable are these wine ratings to actually measure quality? 
 The goal of this research is to get insight in the reviews given by Robert Parker. This research will try to answer the following question: 
 
 **How reliable are the reviews of Robert Parker?**
@@ -90,7 +88,7 @@ Even though there are no rate limits specified, the number of requests will be l
 | Region          | Region of the vineyard                                         |
 | Sub-region      | A specific area within the region                              |
 | Appellation     | A defined area where grapes must be harvested to carry a specific name or label |
-| Sub-appellation | A specfic are within an appellation                            |
+| Sub-appellation | A specfic area within an appellation                           |
 
 
 ## Determine data mining goals
@@ -99,7 +97,7 @@ The following data mining goals are defined:
 
 * What is the range of the winescores?
 * What are the patterns of the winescores over time?
-* In what extent do the variables (sweetness, color, producer, type, reviewer, variety, location, appellation, vintage) measured by Robert Parker influece the score of the wine?
+* In what extent do the variables (sweetness, color, producer, type, reviewer, variety, location, appellation) measured by Robert Parker influence the winescore?
 
 The success criteria include:
 
@@ -109,14 +107,14 @@ The success criteria include:
 
 ## Project plan
 
-| Phase                       | Time         | Risks                                                                   |
-| -------------------------- | ------------ |--------------------------------------------------------------------------- |
-| Business understanding     | 4 week       | To correctly formulate the business objectives.                           |
-| Data understanding         | 3 days       | To find inexplicable patterns in the data                                                 |
-| Data preparatie            | 1 week       | Unforeseen data problems & low data quality          |
-| Modeling                   | 3 days       | Technical problems & no model fit                   |
-| Evaluation                 | 2 days       |                                                                            |
-| Deployment                 | 2 days       |                                                                            |
+| Phase                      | Time         | Risks                                                  |
+| -------------------------- | ------------ |------------------------------------------------------- |
+| Business understanding     | 4 week       | Hard to correctly formulate the business objectives    |
+| Data understanding         | 3 days       | To find inexplicable patterns in the data              |
+| Data preparatie            | 1 week       | Unforeseen data problems & low data quality            |
+| Modeling                   | 3 days       | Technical problems & no model fit                      |
+| Evaluation                 | 2 days       |                                                        |
+| Deployment                 | 2 days       |                                                        |
 
 
 Tools used:
@@ -130,11 +128,11 @@ Tools used:
 # Data understanding
 
 
-## Collect initial data
+## Collect initial data {#sec-collectinitialdata}
 
-**Robert Parker wijn recensies.** The website contains reviews from different countries. With the scraper reviews per country can be obtained.
-Initially collection will only be done on the following countries: Germany, Italy, Portugal and Austria.
-Reviews will contain the wine rating and additional information such as:
+**Robert Parker wine reviews** The website contains reviews from different countries. With the scraper reviews per country can be obtained.
+Initial data collection will be done on the following countries: Germany, Italy, Portugal and Austria.
+Reviews will contain the winescore and additional information such as:
 
 * Title
 * Drink date
@@ -152,8 +150,8 @@ Reviews will contain the wine rating and additional information such as:
 
 ## Describe data
 
-For Portugal 13.496 wine reviews have been scraped. For Germany 24.889, for Italy 50.358 and for Austria 9488 wine reviews. This results 98.231 wine reviews.
-All reviews contain the same fields (see *collect initial data*):
+For Portugal 13.496 wine reviews have been scraped. For Germany 24.889, for Italy 50.358 and for Austria 9.488 wine reviews. This results 98.231 wine reviews.
+All reviews contain the same fields (see [Collect initial data](#sec-collectinitialdata)):
 
 * **Numeric fields**: Rating
 * **Categorical fields**: Drink date, Reviewed by, Issue date, Source, Producer, Location, Color, Type, Sweetness, Variety
@@ -161,25 +159,26 @@ All reviews contain the same fields (see *collect initial data*):
   - **Title** Contains the year, the producer and the name of the wine.
   - **Content** Free text
 
-The number of fields will differ after data preparation. New fields will be extracted based upon existing fields, for example year.
+The number of fields will differ after data preparation. New fields will be extracted based upon existing fields, for example 'vintage'.
 
 
 ## Explore data
 
-It is difficult to do the data exploration before preparing the data.
-The plotted data shows how many times each categorical values of sweetness, type, color and reviewer are seen in the data.
+It is difficult to do a data exploration before preparing the data.
+See figure \ref{exploration} for how many times the values of the categorical variables sweetness, type, color and reviewer are seen in the data.
 
-![Categorical occurences of sweetness, type, color and reviewer](../images/data_exploration_categorical_occurences.pdf)
+![Categorical occurences of sweetness, type, color and reviewer\label{exploration}](../images/data_exploration_categorical_occurences.pdf)
 
 
 ## Verify data quality
 
-**Missing data.** The columns rating, reviewed_by, source, content, color, type and sweetness contain missing fields, But in theory this can happen in all the fields. In data preparation this will be elaborated since the fields are not split up. Not every wine will contain a sub-region or appellation for example.
+**Missing data.** The columns rating, reviewed_by, source, content, color, type and sweetness contain missing fields, But in theory this can happen in all the fields. In data preparation this will be elaborated since the fields are not split up yet.
 
-**Data Errors.** Since human errors can occur during data entry for scores, It can only be assumed that all the scores are entered correctly unless numbers do not fall withing the 0-100 range.
 
+**Data Errors.** Since human errors can occur during data entry for winescores, it can only be assumed that all the scores are entered correctly unless numbers do not fall withing the 0-100 range.
 There can also be human errors in the entry for other fields but these can only be found if there is an outlier in the value that is only present in for example one review.
 Since data preparation is not fully done by this time the aforementioned errors can still show up when the fields are split up.
+
 
 **Measurement errors.** The ratings do not have a an overall consistent format, Sometimes it contains a range for example (84 – 86) but it can also have a non-concise rating containing plusses or minuses such as 84+
 
@@ -189,33 +188,34 @@ Since data preparation is not fully done by this time the aforementioned errors 
 
 ## Select data
 
-The variables 'Issue date' en 'source' are not necessary for further analysis and will be removed from the dataset.
+The variables 'Issue date' and 'source' are not necessary for further analysis and will be removed from the dataset.
 Initially the data will be limited with reviews from the countries: Italy, Portugal, Germany and Austria. This data is already scraped. 
 
 ## Clean data
 
 Because scraping is used to collect the data several steps must be taken to clean the data.
 
-* Take fieldnames out of the value for example the field “rating” should only contain numbers and not “rating: 87”.
-* Remove any special characters, control character and non-alphanumeric characters with a regular expression (Regex)
+* Take fieldnames out of the value for example the field 'rating' should only contain numbers and not 'rating: 87'.
+* Remove any special characters, control characters and non-alphanumeric characters with a regular expression.
 
 These steps are done within the script containing the scraper, The data is then stored as a CSV in the folder 'data/raw'.
 
 
 **Blanks**:
+
 The fields 'Rating', 'Reviewed_by', 'Source', 'Color', 'Type' and 'Sweetness' contains blanks.
-
-The fields will be removed from the set since filling them with blank values or existing values from other reviews will compromise the results.
-
+The fields will be removed from the set since filling them with zero or an existing value from other reviews will compromise the results.
 The field 'Content' will be left as is since this does not contribute directly to the description or quality of the wine.
 
 
 **Outliers**:
+
 Outliers in the fields however will not be removed but these will be kept for analysis since most ratings are at the top range 80-90 and especially the rating on the lower ranges could be interesting for this research.
 
 
 **Formatting issues**:
-Formatting within de “Rating” field is also an issue since this contains a number of formats such as:”
+
+Formatting within de 'Rating' field is also an issue since this contains a number of formats such as:
 
 * 86
 * (86-88)
@@ -223,28 +223,27 @@ Formatting within de “Rating” field is also an issue since this contains a n
 * 88-
 * ?
 
-Ratings that contain a "?" have been removed and "+" and "–" are stripped from the value since there is no explanation what a plus and minus mean numerically.
-Ratings that have a range have been averaged so (86-88) will be transformed to 87.
+Ratings that contain a '?' have been removed and '+' and '–' are stripped from the value since there is no explanation what a plus and minus mean numerically. Ratings that have a range have been averaged so (86-88) will be transformed to 87.
 
 
 **Data errors:**
-Due to removal of special characters several values within the field “color” have accidentally been renamed for example Rosé turned into Ros. This has been corrected and now all the values are Rose.
 
+Due to removal of special characters several values within the field 'color' have accidentally been renamed for example 'Rosé' turned into Ros. This has been corrected and now all the values are Rose.
 
 
 ## Construct data
 
 Various new variables are extracted: 
 
-* From the title: **Vintage** and the **Name of the wine**
+* From the title: **Vintage** and the **Name** of the wine
 * From the content: **Length of content**
 * From the location: **Country**, **Region**, **Sub-region**, **Appellation** and **Sub-appellation**.
 
 The next cleaning steps are executed for these new variables:
 
-1. Removed winereviews without vintage
+1. Removed reviews without vintage
 2. Changed datatype of vintage to integer
-3. Check whether the winename is always filled
+3. Check whether the winename is always filled in
 4. Fill missing values of the 'content length' with 0, no content means a 'content length' of 0.
 
 Removal of the no longer necessary variables:
@@ -255,19 +254,19 @@ Removal of the no longer necessary variables:
 * source
 * from_location
 
-After these steps it turned out that besides the field 'content', also Region', 'Sub-region', 'Appellation' and 'Sub-appellation' have missing values. This makes sense for 'Appellation' and 'Sub-appellation' since there is a limited number of appellations. It is meaningless to fill missing values for the field 'Region' with data of other reviews. The missing values in 'Region' will be kept.
+After these steps it turned out that besides the field 'Content', also 'Region', 'Sub-region', 'Appellation' and 'Sub-appellation' have missing values. This makes sense for 'Appellation' and 'Sub-appellation' since there is a limited number of appellations. It is meaningless to fill missing values for the field 'Region' and 'Sub-region' with data of other reviews. The reviews with missing values in these variables will be kept.
 
 
 ## Integrate data
 
-There are four seperate datasets for the different countries. These contain the same attributes, but different records. The datasets will be combined into one dataset. 
+There are four seperate datasets for each country one. The datasets will be combined into one dataset. 
 
 
 # Modelling
 
 ## Modeling technique
 
-There are various data mining goals within the research. In this chapter, the statistical techniques to answer these questions will be discussed in more detail.
+In this chapter, the statistical techniques used to answer the questions will be discussed in more detail.
 
 * Descriptive statistics. By means of descriptive statistics, an answer can be given to the following questions of the data mining goals:
 
@@ -279,10 +278,10 @@ In addition, the descriptive statistics are also used to look at the other varia
 
 * Explanatory statistics. By means of explanatory statistics, the following question can be answered:
 
-  * In what extent do the variables (sweetness, color, producer, type, reviewer, variety, location, appellation, vintage) measured by Robert Parker influece the score of the wine?
+  * In what extent do the variables measured by Robert Parker influence the winescore?
 
 The influence of various variables on the winescore is examined. Statistical tests are performed to examine whether the relation between each variable and the score of wine is coincidental or significantly different.
-To be able to perform a statistical test, it is first examined whether the score of wine is normally distributed. All independent variables (the different variables) have more than 2 groups. In addition, the data consists of independent groups, which means that these are unpaired samples.
+To be able to perform a statistical test, it is first examined whether the score of wine is normally distributed. All independent variables have more than 2 groups. In addition, the data consists of independent groups, which means that these are unpaired samples.
 This means that the test will end up as a 'One-way ANOVA' or 'Kruskal Wallis test', depending on whether the score is normally distributed.
 
 There is one modeling assumptions:
@@ -300,7 +299,8 @@ For all tests an alpha of 0.05 will be used (95 percent confidence interval).
 The Lilliefors test was used to test whether the 'rating' is normally distributed. This test is based on the Kolmogorov-Smirnov test, with the difference that no sketched normal distribution (based on the data) needs to be provided in advance. The result comes in a test score and a p-value. This p-value determines whether the 0-hypothesis can be maintained or rejected.
 
 The Lilliefors test showed that the 'rating' is not normally distributed. Therefore, a Kruskal Wallis test is used for the following tests.
-The Kruskal Wallis test is a non-parametric method for testing. No normal distribution is assumed.
+The [Kruskal Wallis test](https://en.wikipedia.org/wiki/Kruskal%E2%80%93Wallis_one-way_analysis_of_variance) is a non-parametric method for testing. No normal distribution is assumed.
+
 
 $H_0 = \text{Median of all groups are equal}$
 
@@ -325,11 +325,6 @@ This test will be executed for each earlier mentioned variable on all available 
 
 * What is the range of the winescores?
 
-![Histogram of ratings](../images/histogram_rating.pdf)
-
-![Boxplot of ratings](../images/boxplot_rating.pdf)
-
-
 | Measurement    | Value       |
 | -------------- | ----------- |
 | count          | 96990.000000|
@@ -342,57 +337,59 @@ This test will be executed for each earlier mentioned variable on all available 
 | max            |   100.000000|
 
 
+![Histogram of rating\label{ratingshistogram}](../images/histogram_rating.pdf)
+
+Figure \ref{ratingshistogram} shows the count of each rating and figure \ref{ratingboxplot} shows the spread of all ratings.
+
+![Boxplot of ratings\label{ratingboxplot}](../images/boxplot_rating.pdf)
+
 
 * What are the patterns of the winescores over time?
 
-![Median ratings over the years](../images/median_ratings_over_the_years.pdf)
+Figure \ref{ratingoveryears} shows the median of the scores over the years. There is no clear rising or falling trend visible.
 
-The figure shows the median of the scores over the years. There is no clear rising or falling trend visible.
+![Median rating over the years\label{ratingoveryears}](../images/median_ratings_over_the_years.pdf)
 
 
+* In what extent do the variables measured by Robert Parker influence the winescore?
 
-* In what extent do the variables (sweetness, color, producer, type, reviewer, variety, location, appellation, vintage) measured by Robert Parker influece the score of the wine?
+Boxplots have been made for the mentioned variables to provide more insight into the spread of all values. These can be found in the appendixes: [appendixes I](#sec-appendixI).
 
-Boxplots have been made for the mentioned variables to provide more insight into their distributions. These can be found in the attachments: appendix I.
 
-As can be seen in the ratings-histogram, the rating appears to be normally distributed. However, this can only be determined with certainty after a test.
+As can be seen in figure \ref{ratingshistogram}, the rating appears to be normally distributed. However, this can only be determined with certainty after a test.
 
-alpha = 0.05
-$H_0 = \text{The ratings followw a normal distribution}$
-
-$H_1 = \text{The ratings do not follow a normal distribution}$
+* alpha = 0.05
+* $H_0 = \text{The ratings follow a normal distribution}$
+* $H_1 = \text{The ratings do not follow a normal distribution}$
 
 ![Test results of the Lilliefors normal distribution test](../images/test_normalization_results.pdf)
 
 P-value < 0.05 which means that the null hypothesis is rejected. The Lilliefors test shows that the 'rating' is not normally distributed.
 
 
-The following results have come from the kruskal wallis tests.
-
+The following results come from the Kruskal Wallis tests.
 The following general hypotheses have been formulated for each test:
 
-$H_0 = \text{The groups in the variable are equal in terms of rating}$
+* alpha = 0.05
+* $H_0 = \text{The groups in the variable are equal in terms of rating}$
+* $H_1 = \text{At least one group is different than another group in terms of rating}$
 
-$H_1 = \text{At least one group is different than another group in terms of rating}$
+![Test results of all variables related to the rating\label{kruskalwallistresults}](../images/test_results.pdf)
 
-![Test results of all variables related to the rating](../images/test_results.pdf)
-
+Figure \ref{kruskalwallistresults} shows all Kruskal Wallis test results.
+With all the tests the 'test statistic' > 'chi critical value' which means that the null hypothesis is rejected and therefore there is a difference.
 
 
 # Evaluation
 
 ## Evaluate results
 
-Looking at the total ranges of the scores this varies between 15 and 100, However if we focus on where the majority of the scores are this shows an average that is 90, 'Lower Scores' seem to be outliers. Based upon the modelling (Kruskal Wallis test) it can be stated that all variables have at least one group that significantly differs from another group in terms of rating.
-With all the tests the 'test statistic' > 'chi critical value' which means that the null hypothesis is rejected and therefore there is a difference.
-
-
 ### Data mining results assessment
 
 Based on this research, various insights and new questions have emerged. The modeling chapter showed that the ratings are mainly in a high range (88-92). This is an important finding that cannot be gleaned directly from Robert Parker's website. This finding affects the representativity of the dataset. In the context of further research, it will be difficult to determine the impact of, for example, soil type on the basis of a Robert Parker rating. There is little spread in the ratings which causes the mutual differences to be small.
-Based on the tests performed, it can be said that within all the variables studied, groups differ (at least one from another) among themselves in the context of rating.
+Based on the tests performed, it can be said that within all the variables studied, groups differ (at least one from another) in the context of rating.
 
-This is a first step, to really say something about the influence of specific factors on the rating, it will have to be investigated which groups these are and whether a combination of these factors leads to a higher or lower rating.
+This is a first step, to really say something about the influence of specific factors on winescore, it will have to be investigated which groups these are and whether a combination of these factors leads to a higher or lower rating.
 
 All in all, this means that an answer cannot be given directly to the main question: 'How reliable are Robert Parker's reviews'.
 Further research will first have to be done on the aforementioned questions.
@@ -423,7 +420,7 @@ Within the process a number of improvements are to be considered:
 * In what range are the scores given?
 
 50% of the scores are between 88 and 92. The minimum score is 15 and the maximum score is 100. In general, the scores are therefore in a small cluster in the top end of the range.
-The 'skewed' distribution of the wine scores raises some question marks. Are the wines that Robert Parker reviews really all good? Or does it still play a role that a specific colour, type or grape variety is generally found to be tastier?
+The 'skewed' distribution of the wine scores raises some question marks. Are the wines that Robert Parker reviews really all good? Or does it still play a role that a specific color, type or grape variety is generally found to be tastier?
 
 * What is the pattern in the scores over the years?
 
@@ -431,14 +428,14 @@ The scores have remained stable over the years. There is no clear trend in the m
 
 * Are there factors that influence the scores given to the wine?
 
-A test was done with each variable to determine whether the difference between the variables has an influence on the rating of the wine. All these tests have shown that there is a significant difference between at least one group and another group in terms of rating. This does not say anything about which groups these are. Further research will have to be done on this.
+A test was done with each variable to determine whether the difference between the variable has an influence on the rating of the wine. All these tests have shown that there is a significant difference between at least one group and another group in terms of rating. This does not say anything about which groups these are. Further research will have to be done on this.
 
 ## Conclusions
 
 The business objective: How reliable are Robert Parker's reviews?
-Is the data representative enough for further research? In further research, the aforementioned factors (for example soil type) will be compared to these data.
+Is the data representative enough for further research?
 
-With the currently available results it is not possible to answer the main question. To this end, further research will have to be done. However the small spread in the ratings currently collected does indicate that representativeness of the reviews might not be a good fit to use in research to measure quality.
+With the currently available results it is not possible to answer the business objective. To this end, further research will have to be done. However the small spread in the ratings currently collected does indicate that representativeness of the reviews might not be a good fit to use in research to measure quality.
 
 
 ## Determine next steps
@@ -457,9 +454,10 @@ With the currently available results it is not possible to answer the main quest
 * A git repository has been created for this project. Changes to the project will be deployed there.
 
 
+
 # Appendixes
 
-## Appendix I
+## Appendix I {#sec-appendixI}
 
 ![Boxplot of country](../images/boxplot_country.pdf)
 ![Boxplot of appellation](../images/boxplot_appellation.pdf)
