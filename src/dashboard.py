@@ -17,7 +17,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
-        "Get Help": "https://google.com",
+        "Get Help": "https://github.com/lisannesijtsma/robertparker_wine_reviews",
         "About": 'Robert Parker wine review insights is made by Lisanne Sijtsma. For more information, documentation and GitHub Repository see "Get Help"',
     },
 )

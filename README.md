@@ -18,12 +18,12 @@ To run the streamlit dashboard:
 * For scraping Robert Parker's reviews: 
     - Create a [Robert Parker](https://www.robertparker.com/) account
     - Create a cred.py in the source folder with your credentials. It should follow this format:
-    
+
 ```username = ""```
 
 ```password = ""``` 
 
-    - Run the script with --country: 
+Run the script with --country: 
 ```python main.py --country {country}```
 
 
