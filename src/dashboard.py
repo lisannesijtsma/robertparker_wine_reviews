@@ -28,14 +28,14 @@ st.text(f"Last updated: {datetime.now(): %A %B %d, %Y %H:%M}")
 #### LOAD DATA
 # Caching docs: https://docs.streamlit.io/library/get-started/create-an-app
 @st.cache_data
-def load_data(nrows: int, file: Path) -> pd.DataFrame:
+def load_data(file: Path) -> pd.DataFrame:
     """Load data and return in a DataFrame"""
-    data = pd.read_csv(file, delimiter=",", index_col=0, nrows=nrows)
+    data = pd.read_csv(file, delimiter=",", index_col=0)
     return data
 
 
 data_load_state = st.text("Loading data...")
-data = load_data(20000, data_file)
+data = load_data(data_file)
 data_load_state.text("Data successfully loaded!")
 st.write("---")
 
