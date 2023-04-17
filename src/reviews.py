@@ -167,7 +167,8 @@ def describe_data(df: pd.DataFrame) -> None:
 def check_normal_dist(df: pd.DataFrame) -> None:
     """Check and test the normal distribution by histogram and lilliefors test"""
     plt.figure(figsize=(10, 4))
-    sns.histplot(data=df, x=RATING, stat="count", binwidth=1)
+    ax = sns.histplot(data=df, x=RATING, stat="count", binwidth=1)
+    ax.set_title(f"Histogram of Rating")
     write_plot(plt, "histogram_rating")
 
     plt.figure(figsize=(10, 4))
@@ -200,6 +201,7 @@ def create_boxplots(df: pd.DataFrame, var: str) -> None:
 
 def kruskal_wallis_test(test_df, num_field, cat_field, alpha):
     """Execute kruskal wallis test and return the teststatistics"""
+    """Based on: https://medium.com/@indkulwardana8/application-on-kruskal-wallis-test-26c92af132f3"""
     k = test_df[cat_field].nunique()
     N = test_df[cat_field].count()
 
@@ -280,8 +282,9 @@ def get_statistics(df: pd.DataFrame) -> None:
 
     plt.figure(figsize=(10,5))
     ax = sns.lineplot(data=df, x='vintage', y=RATING, estimator='median', markers=True, dashes=True, err_style='band')
+    ax.set_title(f"Median rating over the years")
     ax.set(xticks=df['vintage'].values)
-    write_plot(plt, "median_ratings_over_the_years")
+    write_plot(plt, "median_rating_over_the_years")
 
 
 def get_insights(presets: BaseSettings) -> None:
