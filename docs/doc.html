@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.313">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Lisanne Sijtsma">
+<meta name="dcterms.date" content="2023-04-08">
+
+<title>Hoe betrouwbaar zijn de wijn beoordeling van Robert Parker?</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="doc_files/libs/clipboard/clipboard.min.js"></script>
+<script src="doc_files/libs/quarto-html/quarto.js"></script>
+<script src="doc_files/libs/quarto-html/popper.min.js"></script>
+<script src="doc_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="doc_files/libs/quarto-html/anchor.min.js"></script>
+<link href="doc_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="doc_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="doc_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="doc_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="doc_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="..\src\doc.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Hoe betrouwbaar zijn de wijn beoordeling van Robert Parker?</h1>
+<p class="subtitle lead">Capstone project - Data mining &amp; exploration</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Lisanne Sijtsma </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 8, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+<div>
+  <div class="abstract">
+    <div class="abstract-title">Abstract</div>
+    Web scraping van de website van Robert Parker en een onderzoek naar de betrouwbaarheid van deze wijn recensies
+  </div>
+</div>
+
+</header>
+
+<section id="business-understanding" class="level1">
+<h1>Business understanding</h1>
+<section id="determine-business-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="determine-business-objectives">Determine business objectives</h2>
+<section id="background" class="level3">
+<h3 class="anchored" data-anchor-id="background">Background</h3>
+<p>Dit project komt voort uit een hobby en is een vervolg op een eerder project genaamd: <em>Exploration in the quality of wine, the weather and the relationship between both</em>. Dit voorgaande project was onderdeel van het vak <em>Programming for Data Science</em>. Over het algemeen wordt de kwaliteit van wijn onder andere bepaald door:</p>
+<ul>
+<li>De druifsoort</li>
+<li>Het klimaat</li>
+<li>De bodemsoort</li>
+<li>De houtsoort (van het vat)</li>
+<li>Het rijpingsproces in de fles</li>
+</ul>
+<p>Echter is de combinatie van allen op de daadwerkelijke kwaliteit nog niet onderzocht. Daarnaast is het ook lastig om kwaliteit ergens in uit te drukken, want wie bepaalt uiteindelijk kwaliteit? Is dat de persoon die de wijn drinkt? Of iemand die verstand heeft van wijn? Het blijft een subjectief oordeel. En dat is de aanleiding voor dit onderzoek.</p>
+<p>Om een goed beeld te geven wat er is onderzocht in het voorgaande project volgt hier een toelichting daarvan.</p>
+<p><strong>Voorgaande project</strong></p>
+<p>Het doel van het voorgaande project was om zowel de kwaliteit van wijn, het weer door de jaren heen en de relatie tussen beide te onderzoeken. Als databron voor de kwaliteit van wijn is de <a href="https://www.robertparker.com/resources/vintage-chart">website van Robert Parker</a> gebruikt. <a href="https://nl.wikipedia.org/wiki/Robert_M._Parker">Robert Parker</a> is een van ’s werelds meest bekende wijn critici. Hij recenseert samen met een team wijnen over de hele wereld. Het voorgaande project richtte zich op een specifiek gebied: Barolo, Italië. Binnen dit gebied zijn van verschillende jaren de recensies opgehaald van alle wijnen. Vervolgens is per jaar hier een gemiddelde van genomen. Als databron voor het weer is gebruik gemaakt van <a href="https://www.earthdata.nasa.gov/">NASA EARTH Data</a>. Dagelijkse weer data van het Barolo gebied is hier uitgehaald en omgezet naar jaarlijkse gemiddelden. Het betrof 18 variabelen die het weer meten. Als laatste stap is er gekeken naar de relatie tussen beide datasets. Geen van de 18 variabelen kon direct in verband worden gebracht met een hogere of lagere gemiddelde wijn-score van Robert Parker.</p>
+<p>Zoals omschreven is in het voorgaande project gebruik gemaakt van recensies van Robert Parker voor de kwaliteit van wijn. Maar hoe betrouwbaar zijn deze recensies eigenlijk om daadwerkelijk iets over de kwaliteit te zeggen?</p>
+</section>
+<section id="business-objectives" class="level3">
+<h3 class="anchored" data-anchor-id="business-objectives">Business objectives</h3>
+<p>Het doel van dit onderzoek is inzicht krijgen in de recensies die worden gegeven door Robert Parker. Daarmee wil men de volgende vraag beantwoorden:</p>
+<p><strong>Hoe betrouwbaar zijn de recensies van Robert Parker?</strong></p>
+<p>Daaruit vloeien een aantal andere vragen:</p>
+<ul>
+<li>Hoe objectief worden de wijnen beoordeeld?</li>
+<li>Zijn er factoren die invloed hebben op de scores die worden gegeven aan een wijn?</li>
+<li>Is de data representatief genoeg voor verder onderzoek? <em>In verder onderzoek zullen eerdergenoemde factoren (o.a. bodemsoort) tegen deze data worden aangelegd.</em></li>
+</ul>
+</section>
+<section id="business-success-criteria" class="level3">
+<h3 class="anchored" data-anchor-id="business-success-criteria">Business success criteria</h3>
+<p>Dit project is succesvol wanneer er een antwoord kan worden gegeven op bovenstaande vragen. Op basis van die uitkomsten kan er met de data van Robert Parker worden doorgegaan met een breder onderzoek. Mocht de data niet representatief bevonden worden dan zal er opnieuw onderzoek moeten worden gedaan hoe wijnkwaliteit het best te meten is.</p>
+</section>
+</section>
+<section id="assess-situation" class="level2">
+<h2 class="anchored" data-anchor-id="assess-situation">Assess situation</h2>
+<section id="inventory-of-resources" class="level3">
+<h3 class="anchored" data-anchor-id="inventory-of-resources">Inventory of resources</h3>
+<p>Voor de data wordt binnen dit project gebruik gemaakt van de website van Robert Parker. De wijnrecensies zullen worden <em>gescraped</em>. Dit zal onderdeel zijn van het project. Er wordt gekeken naar de recensies betreft wijnen uit verschillende landen en verschillende jaren.</p>
+</section>
+<section id="requirements-assumptions-constraints" class="level3">
+<h3 class="anchored" data-anchor-id="requirements-assumptions-constraints">Requirements, assumptions &amp; constraints</h3>
+<p>Er is onderzocht of de data van de website van Robert Parker <em>gescraped</em> mag worden. Het <a href="https://www.zenrows.com/blog/robots-txt-web-scraping#robota-txt-pros-cons"><code>robots.txt</code> bestand</a> op de website laat zien dat dit is toegestaan en dat er geen rate limits zijn.</p>
+</section>
+<section id="risks-and-contigencies" class="level3">
+<h3 class="anchored" data-anchor-id="risks-and-contigencies">Risks and contigencies</h3>
+<p>Ondanks dat er geen <em>rate limits</em> zijn gespecificeerd in de <code>robots.txt</code>, zal het aantal requests zo veel mogelijk worden beperkt. Zowel in de testfase (bouwen van de <em>scraper</em>, als bij het daadwerkelijk ophalen van de data).</p>
+</section>
+<section id="terminology" class="level3">
+<h3 class="anchored" data-anchor-id="terminology">Terminology</h3>
+<p>Er volgt een beschrijving van een aantal begrippen:</p>
+<table class="table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 80%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variabele</th>
+<th>Uitleg</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Rating</td>
+<td>De score van de wijn tussen 0 en 100</td>
+</tr>
+<tr class="even">
+<td>Drink date</td>
+<td>Wanneer de wijn idealiter gedronken zou moeten worden</td>
+</tr>
+<tr class="odd">
+<td>Issue date</td>
+<td>Datum waarop de review is gedaan</td>
+</tr>
+<tr class="even">
+<td>Source</td>
+<td>Locatie van het bijbehorende artikel</td>
+</tr>
+<tr class="odd">
+<td>Content</td>
+<td>Begeleidende (uitleg) tekst / review tekst</td>
+</tr>
+<tr class="even">
+<td>Type</td>
+<td>Type van de wijn (bijvoorbeeld Table (tafelwijn), of Sparkling (bruisend))</td>
+</tr>
+<tr class="odd">
+<td>Sweetness</td>
+<td>Zoetheid van de wijn</td>
+</tr>
+<tr class="even">
+<td>Variety</td>
+<td>Druifsoort</td>
+</tr>
+<tr class="odd">
+<td>Vintage</td>
+<td>Het jaar dat de druif is geplukt</td>
+</tr>
+<tr class="even">
+<td>Sub-region</td>
+<td>Een specifiek gebied binnen de regio</td>
+</tr>
+<tr class="odd">
+<td>Appellation</td>
+<td>Een gedefinieerd gebied waar druiven moeten worden verbouwd om een specifieke naam te mogen dragen</td>
+</tr>
+<tr class="even">
+<td>Sub-appellation</td>
+<td>Een specifiek gebeid binnen een appellatie</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="costs-and-benefits" class="level3">
+<h3 class="anchored" data-anchor-id="costs-and-benefits">Costs and benefits</h3>
+<p>Er zijn (voor nu) geen kosten gemoeid bij dit project, behalve tijd van de onderzoeker. Als dit project succesvol is kan er antwoord worden gegeven op de <em>business objectives</em> en kan er vervolg onderzoek worden uitgevoerd.</p>
+</section>
+</section>
+<section id="determine-data-mining-goals" class="level2">
+<h2 class="anchored" data-anchor-id="determine-data-mining-goals">Determine data mining goals</h2>
+<section id="data-mining-goals" class="level3">
+<h3 class="anchored" data-anchor-id="data-mining-goals">Data mining goals</h3>
+<p>Om inzicht te krijgen in de wijnrecensies die worden gegeven door Robert Parker zijn de volgende technische doelen opgesteld:</p>
+<ul>
+<li>In wat voor range worden de scores gegeven?</li>
+<li>Wat is het gedrag van de scores over de jaren heen?</li>
+<li>In hoeverre is de wijn / sweetness / color / producer / type / reviewer / variety / locatie / appellation /vintage / begeleidende tekst van invloed op de score van de wijn?</li>
+</ul>
+<p>Uiteindelijk moet daarmee antwoord gegeven kunnen worden op de vragen die zijn gesteld in <em>business objectives</em>.</p>
+</section>
+<section id="data-mining-success-criteria" class="level3">
+<h3 class="anchored" data-anchor-id="data-mining-success-criteria">Data mining success criteria</h3>
+<p>Met een zekerheid van 95% kunnen zeggen welke meegenomen variabelen van invloed zijn op de score die wordt gegeven. Daarnaast op basis van de range van de ‘scores’ en het gedrag daarvan over de jaren heen inzicht kunnen geven over de representativiteit van de dataset.</p>
+</section>
+</section>
+<section id="produce-project-plan" class="level2">
+<h2 class="anchored" data-anchor-id="produce-project-plan">Produce project plan</h2>
+<section id="project-plan" class="level3">
+<h3 class="anchored" data-anchor-id="project-plan">Project plan</h3>
+<table class="table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 10%">
+<col style="width: 66%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Fase</th>
+<th>Tijd</th>
+<th>Risico’s</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Business understanding</td>
+<td>4 week</td>
+<td>Het goed kunnen formuleren van hoofd/deelvragen - data binnen kunnen halen</td>
+</tr>
+<tr class="even">
+<td>Data understanding</td>
+<td>3 days</td>
+<td>Onverklaarbare dingen zien</td>
+</tr>
+<tr class="odd">
+<td>Data preparatie</td>
+<td>1 week</td>
+<td>Onvoorziene data problemen - data kwaliteit is anders dan verwacht</td>
+</tr>
+<tr class="even">
+<td>Modeling</td>
+<td>3 days</td>
+<td>Technische problemen - niet kunnen vinden van goed model</td>
+</tr>
+<tr class="odd">
+<td>Evaluation</td>
+<td>2 days</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Deployment</td>
+<td>2 days</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="initial-assesment-of-tools-and-techniques" class="level3">
+<h3 class="anchored" data-anchor-id="initial-assesment-of-tools-and-techniques">Initial assesment of tools and techniques</h3>
+<p>De volgende tooling wordt gebruikt voor dit project:</p>
+<ul>
+<li>Visual Studio Code (editor)</li>
+<li>Python (code)</li>
+<li>Streamlit (dashboard)</li>
+<li>Quarto (document)</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="data-understanding" class="level1">
+<h1>Data understanding</h1>
+<section id="collect-initial-data" class="level2">
+<h2 class="anchored" data-anchor-id="collect-initial-data">Collect initial data</h2>
+<p><strong>Robert Parker wijn recensies.</strong> Op de website zijn recensies van verschillende landen beschikbaar. Met de gebouwde <em>scraper</em> is het mogelijk deze recensies per land op te halen. Initieel zullen recensies van de landen Duitsland, Italië en Portugal worden opgehaald. De recensies bevatten de wijnscore. Ook bevatten ze aanvullende informatie, dit zijn de volgende 12 velden:</p>
+<ul>
+<li>Title</li>
+<li>Drink date</li>
+<li>Reviewed by</li>
+<li>Issue date</li>
+<li>Source</li>
+<li>Content</li>
+<li>Producer</li>
+<li>Location</li>
+<li>Color</li>
+<li>Type</li>
+<li>Sweetness</li>
+<li>Variety</li>
+</ul>
+</section>
+<section id="describe-data" class="level2">
+<h2 class="anchored" data-anchor-id="describe-data">Describe data</h2>
+<p>Voor Portugal zijn 13.496 wijn recensies opgehaald. Voor Duitsland zijn er 24.889 wijn recensies opgehaald en voor Italië 50.358. Bij elkaar resulteert dit in 88.743 recensies. Voor alle recensies zullen overeenkomende velden beschikbaar zijn (zie <em>collect initial data</em>).</p>
+<ul>
+<li><strong>Numerieke velden</strong>: Rating</li>
+<li><strong>Categorische velden</strong>: Drink date, Reviewed by, Issue date, Source, Producer, Location, Color, Type, Sweetness, Variety</li>
+<li><strong>Overig</strong>:
+<ul>
+<li><strong>Title</strong> Bevat het jaar, de producer en de naam van de wijn</li>
+<li><strong>Content</strong> Vrije tekst</li>
+</ul></li>
+</ul>
+<p>Het aantal velden zal na de data preparatie anders zijn, daar worden nieuwe velden gecreëerd op basis van de bestaande velden, zoals bijvoorbeeld het jaar. Ook zullen voor dit project onnodige velden worden verwijderd.</p>
+</section>
+<section id="explore-data" class="level2">
+<h2 class="anchored" data-anchor-id="explore-data">Explore data</h2>
+<p>Het is lastig al een exploratie te doen vóór de data preparatie. Er zijn wel een aantal interessante resultaten aan de dataset: 88743 rijen en 88477 unieke titels - dat betekent dat er 266 overeenkomende combinaties van vintage, producent en wijn zijn. 266 overeenkomende wijnen, met een rating dus.</p>
+<p>Deze plots laten zien hoe vaak de verschillende categorische waarden van sweetness, type, color en reviewer voorkomen. <img src="data_exploration_categorical_occurences.png" class="img-fluid" alt="categorical_occ"></p>
+</section>
+<section id="verify-data-quality" class="level2">
+<h2 class="anchored" data-anchor-id="verify-data-quality">Verify data quality</h2>
+<p>plaatje toevoegen van de missende values per kolom <strong>Missing data.</strong> Bij alle velden kan missende data voorkomen. Dit zal tijdens de data preparatie verder naar voren komen, omdat nu de verschillende velden niet zijn opgesplitst (zoals de locatie). Niet iedere wijn zal een sub-regio of een appellation hebben bijvoorbeeld.</p>
+<p><strong>Data errors.</strong> Typfouten kunnen voorkomen bij het invullen van de score. Dit is alleen te achterhalen als er een rating buiten de range 0-100 valt, dat is nu niet het geval. Eventueel kunnen er typfouten gemaakt zijn in een ander veld. Dit zou zijn opgevallen bij het kijken naar de unieke waarden van ieder veld. Het is mogelijk dat dit bij data preparation nog verder naar voren komt, omdat daar nog velden worden opgesplitst.</p>
+<p><strong>Measurement errors.</strong> Bij de rating komen een aantal verschillende formats voor. Soms is het een range van scores (bijvoorbeeld 84 -86), maar ook een +, - of ? komt voor (bijvoorbeeld 84+). coding inconsistencies bad metadata</p>
+</section>
+</section>
+<section id="data-preparation" class="level1">
+<h1>Data preparation</h1>
+<section id="select-data" class="level2">
+<h2 class="anchored" data-anchor-id="select-data">Select data</h2>
+<p><strong>Selecting items.</strong> De velden ‘Issue date’ en ‘source’ zijn niet nodig voor project en zullen niet worden meegenomen.</p>
+<p><strong>Selecting attributes.</strong> Dit project zal intieel worden beperkt tot de wijn recensies uit de landen Portugal, Duitsland en Italië. Deze data is initieel opgehaald. Dit betekent dat dus alle data zal worden meegenomen. Het blijft mogelijk deze set uit te breiden.</p>
+</section>
+<section id="clean-data" class="level2">
+<h2 class="anchored" data-anchor-id="clean-data">Clean data</h2>
+<p>Door het <em>scrapen</em> van de data, moet er veel worden opgeschoond. Bij de meeste waarden staat de veldnaam nog in de waarde (bijvoorbeeld bij het veld ‘Rating’ is de waarde: Rating: 87). Dit is voor alle velden opgeschoond door de veldnamen er uit te halen. Daarnaast staan er veel enters, spaties en overige tekens rondom de waarde. Deze zijn ook verwijderd door gebruik te maken van regex. Dit onderdeel van het opschonen van de data is direct uitgevoerd bij het <em>scrapen</em> van de data. Deze data is vervolgens in csv-formaat opgeslagen in de map <em>raw_data</em></p>
+<p>In de velden ‘Rating’, ‘Reviewed by’, ‘Source’, ‘Content’, ‘Color’, ‘Type’ en ‘Sweetness’ komen missende waarden voor. Het is nietszeggend om een missende waarde op te vullen met data van een andere wijnrecensie. Daarom zullen wijnrecensies met missende waarden in de velden ‘Rating’, ‘Reviewed by’, ‘Source’, ‘Color’, ‘Type’ en ‘Sweetness’ worden verwijderd. Een wijnrecensie met missende waarden in het veld content wordt niet verwijderd, omdat deze niet direct de wijn omschrijft zoals de andere velden dat doen.</p>
+<p>Binnen het veld ‘Rating’ komen verschillende formats voor:</p>
+<ul>
+<li>86</li>
+<li>(86-88)</li>
+<li>88+</li>
+<li>88-</li>
+<li>?</li>
+</ul>
+<p>De wijnrecensies met een vraagteken voor ‘Rating’ zijn verwijderd. Daarnaast is de “+” en “-” verwijderd van de ratings, omdat er niet is gedocumenteerd is hoeveel meer of minder dit is op de score. Van een score range is een gemiddelde genomen van de range (Bij een range van (86-88), wordt dit dus 87).</p>
+<p>Controle of alle ratings binnen de 0 en 100 zijn.</p>
+<p>Voor het veld ‘color’ kwamen verschillende waarden voor. ‘White’, ‘Ros’, ‘Red’, ‘Rose’, nan. (Plaatje met hoe vaak iedere waarde voorkomt). Ros is een fout door het binnenhalken van dedata. Daar zijn alle niet a-z characters verwijderd. Rosé is dus ros geworden. Dit aangepast dat Ros Rose is geworden.</p>
+</section>
+<section id="construct-data" class="level2">
+<h2 class="anchored" data-anchor-id="construct-data">Construct data</h2>
+<p>Er worden verschillende nieuwe velden (kolommen) aangemaakt op basis van de opgehaalde wijnrecensies:</p>
+<ul>
+<li>Vintage - Uit de titel</li>
+<li>Lengte Vintage - Aantal karakters van ‘Vintage’</li>
+<li>Name (naam van de wijn) - Uit de titel</li>
+<li>Lengte Content - Aantal karakters van ‘Content’</li>
+<li>Country - Uit de locatie</li>
+<li>Region - Uit de locatie</li>
+<li>Sub-region - Uit de locatie</li>
+<li>Appellation - Uit de locatie</li>
+<li>Sub-appellation - Uit de locatie</li>
+</ul>
+<p>Vervolgens zijn er ook <em>cleaning-steps</em> over deze data gegaan.</p>
+<ol type="1">
+<li>Wijnrecensies zonder vintage worden verwijderd.</li>
+<li>Het datatype van vintage wordt omgezet naar integer.</li>
+<li>Controle of de name altijd gevuld is.</li>
+<li>Missing values in de length_content opvullen met 0, want geen content is een lengte van 0.</li>
+</ol>
+<p>Na de controles worden de velden die niet nodig zijn voor verder onderzoek verwijderd: * ‘title’ * ‘rating’ * ‘issue_date’ * ‘source’ * ‘from_location’</p>
+<p>Na deze stappen blijken naast ‘Content’, ook ‘Region’, ‘Sub-region’, ‘Appellation’ en ‘Sub-appellation’ missende waarden te hebben. Voor ‘Appellation’ en ‘Sub-appellation’ is het logisch dat er veel missende waarden zijn, omdat er maar een beperkt aantal appellations zijn. Voor het veld ‘Region’ is het nietszeggend deze op te vullen met data uit een andere recensie. Voor nu laten we deze staan als een missende waarde.</p>
+<p>Checken op uitschieters. Controle op hoeveelheid unieke velden.</p>
+</section>
+<section id="integrate-data" class="level2">
+<h2 class="anchored" data-anchor-id="integrate-data">Integrate data</h2>
+<p>Er zijn drie losse datasets. Deze worden <em>append</em>. Ze bevatten dezelfde attributen (velden), maar verschillende records (rijen)</p>
+</section>
+<section id="format-data" class="level2">
+<h2 class="anchored" data-anchor-id="format-data">Format data</h2>
+<ul>
+<li></li>
+</ul>
+</section>
+</section>
+<section id="modelling" class="level1">
+<h1>Modelling</h1>
+<section id="select-modeling-technique" class="level2">
+<h2 class="anchored" data-anchor-id="select-modeling-technique">Select modeling technique</h2>
+<section id="modeling-technique" class="level3">
+<h3 class="anchored" data-anchor-id="modeling-technique">Modeling technique</h3>
+<p>Binnen het onderzoek zijn er verschillende data mining goals. Binnen dit hoofdstuk zal verder in worden gegaan op de statistische technieken om deze vragen te beantwoorden.</p>
+<ul>
+<li><p>Beschrijvende statistiek. Door middel van beschrijvende statistiek kan een antwoord worden gegeven op volgende vragen van de data mining goals:</p>
+<ul>
+<li>In wat voor range worden de scores gegeven</li>
+<li>Wat is het gedrag van de scores over de jaren heen</li>
+</ul></li>
+</ul>
+<p>Daarnaast wordt de beschrijvende statistiek ook gebruikt om naar de andere variabelen te kijken. Zo kan een totaal beeld worden verkregen van de dataset.</p>
+<ul>
+<li><p>Verklarende statistiek. Door middel van verklarende statistiek kan antwoord gegeven worden op de volgende algemene vraag:</p></li>
+<li><p>In hoeverre is een variabele van invloed op een andere variabele?</p></li>
+</ul>
+<p>Binnen dit onderzoek wordt gekeken naar de invloed van verschillende variabelen op de score van wijn. Er worden statistische toetsen uitgevoerd om te onderzoeken of de relatie tussen iedere variabele en de score van wijn toeval is, of significant anders. Om een statistische toets uit te kunnen voeren wordt eerst onderzocht of de score van wijn normaal verdeeld is. Alle onafhankelijke variabelen (de veschillende variabelen) hebben meer dan 2 groepen. Daarnaast bestaat de data uit onafhankelijke groepen, wat betekent dat dit ongepaard is. Alles bij elkaar betekent dit dat de toets zal uitkomen op een ‘One-way ANOVA’ of ‘Kruskal Wallis toets’, afhankelijk van of de score normaal verdeeld is.</p>
+</section>
+<section id="modeling-assumptions" class="level3">
+<h3 class="anchored" data-anchor-id="modeling-assumptions">Modeling assumptions</h3>
+<p>Er word aangenomen dat de samples onafhankelijk van elkaar zijn. https://statsandr.com/blog/kruskal-wallis-test-nonparametric-version-anova/ De afhankelijke variabele is ‘Rating’. Dit is een ratio. De onafhankelijke variabelen zijn de verschillende variabelen die mogelijk invloed hebben op de afhankelijke variabelen. Hier vallen onder: ‘Wijn’, ‘Sweetness’, ‘Color’, ‘Producer’, ‘Type’, ‘Reviewer’, ‘Variety’, ‘Locatie’, ‘Appellation’, ‘Vintage’, en ‘Begeleidende tekst’. Dit zijn allemaal nomnimale / categoriale variabelen.</p>
+</section>
+</section>
+<section id="generate-test-design" class="level2">
+<h2 class="anchored" data-anchor-id="generate-test-design">Generate test design</h2>
+<ul>
+<li>Test design
+<ul>
+<li>Modelkwaliteit (hoe betrouwbaar precies?) -&gt; 95%?</li>
+<li>Modelvaliditeit (Meetje het juiste?) -&gt; Het is lstig te zeggen over de uiteindelijke echte betrouwbaarheid omdat we geen validatie hebben. Immers, wat is kwaliteit en hoe meet je deze objectief? Wel kunnen we iets zeggen over de betrouwbaarheid in het kader van aannemelijkheid. Hoe aannemelijk is het alle wijnen die gereviewed worden een score hebben die hoger is dan 80 (bijv)?</li>
+</ul></li>
+</ul>
+</section>
+<section id="build-model" class="level2">
+<h2 class="anchored" data-anchor-id="build-model">Build model</h2>
+<p>Om te toetsen of de ‘rating’ normaal verdeeld is, is gebruik gemaakt van de lilliefors toets. Deze toets is gebaseerd op de Kolmogorov-Smirnov toets met het verschil dat er geen geschetste normaal verdeling vooraf hoeft te worden meegegeven. Het resultaat komt in een toetswaarde en een p waarde. Deze p waarde bepaald of de 0-hypothese kan worden behouden of verworpen.</p>
+<p>Uit deze toets is gekomen dat de ‘rating’ niet normaal verdeeld is. Daarom wordt er voor de volgende toetsen een Kruskal Wallis toets gebruikt.</p>
+<p>The Kruskal Wallis test is a non-parametric method for testing. No normal distribution is assumed.</p>
+<p><span class="math inline">\(H_0 = \text{Median of all groups are equal}\)</span></p>
+<p><span class="math inline">\(H_1 = \text{At least one population median of one group is different}\)</span></p>
+<ul>
+<li><span class="math inline">\(N = \text{Total number of observations across all groups}\)</span></li>
+<li><span class="math inline">\(g = \text{Number of groups}\)</span></li>
+<li><span class="math inline">\(n_i = \text{Number of observations in group \textit{i}}\)</span></li>
+<li><span class="math inline">\(r_{ij} = \text{The rank (among all observations) of observation \textit{j} from group \textit{i}}\)</span></li>
+<li><span class="math inline">\(\overline{r}_i = \dfrac{\sum_{j=1}^{n_i}r_{ij}}{n_i} \text{is the average rank of all observations in group \textit{i}}\)</span></li>
+<li><span class="math inline">\(\overline{r} = \dfrac{1}{2}(N+1) \text{is the average of all the } r_{ij}\)</span></li>
+</ul>
+<p><span class="math inline">\(H = {\dfrac{12}{N(N+1)} \sum_{i=1}^{g}n_{i}\overline{r}_{i}^{2} - 3 (N+1)}\)</span></p>
+<p>If significant this means there is at least one group different than the others. It does not identify which group it is.</p>
+<p>This test will be executed for each earlier mentioned variable on all available data.</p>
+</section>
+<section id="assess-model" class="level2">
+<h2 class="anchored" data-anchor-id="assess-model">Assess model</h2>
+<p>De rating lijkt op een normaal verdeling volgens de histogram. Echter voordat dit met zekerheid kan worden gezegd zal de toets moeten worden uitgevoerd.</p>
+<p>alpha = 0.05 H0: De ratings volgen een normal distribution H1: De ratings volgen geen normal distribution</p>
+<p>De Test Statistic is 0.087 en de P-value 0.00099. P &lt; 0.05 wat betekent dat de nulhypothese wordt verworpen. Uit de Lilliefors toets komt dat de ‘rating’ niet normaal verdeeld is.</p>
+<p>Uit de kruskall wallis toetsen zijn de volgende resultaten gekomen: Voor iedere toets zijn de volgende hypotheses opgesteld:</p>
+<p><strong>Color</strong> H0: The x variabelen are equal in terms of rating H1: At least one variabele is different from the other x variabelen in terms of rating</p>
+<p>#test_results.pdf</p>
+</section>
+</section>
+<section id="evaluation" class="level1">
+<h1>Evaluation</h1>
+<p>Van data mining goals naar business objectives. Nav modelling (kruskal wallis toets) kan nu worden gezegd dat alle variabelen op zijn minst één significant anders is in termen van rating.</p>
+<p>bij alle toetsen is de test_statstic &gt;= chi_critical value. Wat betekent dat de nulhypothese wordt verworpen er er dus verschil is. Er is ook gekeken naar de range van de scores en …</p>
+<section id="evaluate-results" class="level2">
+<h2 class="anchored" data-anchor-id="evaluate-results">Evaluate results</h2>
+<p>` ### Data mining results assessment</p>
+<p>Het blijft lastig te zeggen hoe de kwaliteit van wijn gementen moet worden. EN het blijft ook lastig om te kunnen zeggen of de reviews van robert parker betrouwbaar zijn. Hoe betrouwbaar is het als eenzelfde reviewer dezelfde gebieden altijd reviewed? Bouwt diegene daar een band op? Waardoor iemand beinvloed kan worden?</p>
+<section id="approved-models" class="level3">
+<h3 class="anchored" data-anchor-id="approved-models">Approved models</h3>
+<p>Dit project heeft opgeleverd een git repository (hier te vinden) met dit erin: - scraper om data van website van robert parker te halen - de daadwerkelijke data van robert parkers’ website. - dashboard om deze data inzichtelijk te maken</p>
+</section>
+</section>
+<section id="review-process" class="level2">
+<h2 class="anchored" data-anchor-id="review-process">Review process</h2>
+<p>Voornamelijk lastig om de business understanding helder te krijgen en wat daad aan vooraf ging. In het kader van het capstone project diverse keren gewisseld van onderwerpen. Dit kostte veel tijd, waardoor er veel werk te doen was in een korte tijd.</p>
+<p>Verdiept in toetsen voor normaal verdelingen zonder vooraf goed te toetsen of de ‘rating’ inderdaad normaal verdeeld is. Dit bleek niet zo te zijn, terwijl dat er op het eerste oog wel zo uit zag.</p>
+<p>Ook binnen dit project lastig om business objectives duidelijk te krijgen. Helder dat (ik) graag de dataset verder wil onderzoeken, maar moeilijk te vatten in duidelijke hoofd en deelvragen.</p>
+<ul>
+<li><p>Nieuwe data toevoegen. Zowel van meerdere landen, maar dit kan ook automatisch worden toegevoegd wanneer er een nieuwe wijn review is gepubliceerd op de website.</p></li>
+<li><p>Antwoord geven op de vraag of deze dataset goed genoeg is om te gebruiken in verder onderzoek Hoe handig zou het zijn om de kwaliteit van wijn te kunnen voorspellen? Specifieker gezegd, waardoor vinden we bepaalde wijn nou zou lekker, en ook: waarom nou juist niet?</p></li>
+</ul>
+<p>Er zijn verschillende dingen die invloed hebben op de kwaliteit.</p>
+</section>
+<section id="discussie-en-conclusie" class="level2">
+<h2 class="anchored" data-anchor-id="discussie-en-conclusie">Discussie en conclusie</h2>
+<p>systematisch deelvragen langslopen etc. Zie powerpoint.</p>
+</section>
+<section id="determine-next-steps" class="level2">
+<h2 class="anchored" data-anchor-id="determine-next-steps">Determine next steps</h2>
+<p>Meer data toevoegen aan het onderzoek om met meer onderbouwing conclusies te kunnen trekken. Betekent een hoge score een goede wijn? Of blijft dit een kwestie van smaak bij de specifieke reviewer? Toevoegen van “mensen” data - vivino?</p>
+</section>
+</section>
+<section id="sec-deployment" class="level1">
+<h1>Deployment</h1>
+<p>Voor nu is er gebruik gemaakt van een persoonlijke subscription voor Robert Parker. Voor in een daadwerkelijke deployment zou dit een npa (non personal account) moeten zijn.</p>
+<ul>
+<li>Plan deployment</li>
+<li>Plan monitoring and maintenance</li>
+<li>Produce final report</li>
+<li>Review project</li>
+</ul>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
